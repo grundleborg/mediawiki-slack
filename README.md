@@ -18,9 +18,8 @@ Mediawiki Integration for Slack.
 
 1. Log in to your Slack Team and click "Integrations".
 2. Select "Incoming WebHooks" as the type.
-3. Expand the "Instructions for Creating Incoming Web Hooks" and copy the URL there under "Setting
-   Messages". We'll need this in a later step.
-4. Choose the default channel you want to use and click "Add Integration".
+3. Choose the default channel you want to use and click "Add Integration".
+4. Copy the Token shown on the left of the page. We'll need this in step 6.
 5. Copy the contents of the Slack folder in this repository to your wiki's extensions folder.
 6. Add the following lines to LocalSettings.php
    
@@ -29,7 +28,8 @@ Mediawiki Integration for Slack.
    require_once "$IP/extensions/Slack/Slack.php";
 
    # Slack extension configuration options
-   $wgSlackWebhookUrl = "THE URL FROM STEP 3";
+   $wgSlackTeamName = "Your Slack Team Name";
+   $wgSlackIntegrationToken = "THE INTEGRATION TOKEN FROM STEP 3";
    $wgSlackUserName = "THE USERNAME YOU WANT YOUR BOT TO HAVE IN SLACK";
    $wgSlackChannel = "#theChannelForBotMessagesToAppearIn";
    ```

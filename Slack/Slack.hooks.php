@@ -13,6 +13,10 @@
  * @ingroup Extensions
  */
 
+// Parts of the Slack Incoming WebHooks Integration URL
+define('SLACK_URL_PREFIX', 'https://');
+define('SLACK_URL_SUFFIX', '.slack.com/services/hooks/incoming-webhook?token=');
+
 class SlackHooks {
 
   public static function encodeSlackChars($in) {
@@ -27,7 +31,12 @@ class SlackHooks {
 
   public static function onPageContentSaveComplete( $article, $user, $content, $summary, $isMinor, 
     $isWatch, $section, $flags, $revision, $status, $baseRevId ) {
-      global $wgSlackWebhookUrl, $wgSlackChannel, $wgSlackUserName;
+      global $wgSlackTeamName, $wgSlackIntegrationToken, $wgSlackChannel, $wgSlackUserName;
+
+      // Build the Slack Incoming WebHooks URL.
+      $url = SLACK_URL_PREFIX.$wgSlackTeamName.SLACK_URL_SUFFIX.$wgSlackIntegrationToken;
+
+      wfDebug("Slack URL: ".$url."\n");
 
       // Build the message we're going to post to Slack.
       $message = '*<'.SlackHooks::encodeSlackChars($article->getTitle()->getFullURL())
@@ -44,10 +53,11 @@ class SlackHooks {
 
       // POST it to Slack.
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $wgSlackWebhookUrl);
+      curl_setopt($ch, CURLOPT_URL, $url);
       curl_setopt($ch, CURLOPT_POST, 1);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
       $result = curl_exec($ch);
+      wfDebug("Slack Result: ".$result."\n");
     }
 
 }

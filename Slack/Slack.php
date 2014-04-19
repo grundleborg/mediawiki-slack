@@ -39,10 +39,14 @@ $wgHooks['PageContentSaveComplete'][] = 'SlackHooks::onPageContentSaveComplete';
 // These should be overridden in LocalSettings.php
 // See README.md for an example.
 /*
- * The full Web Hook URL given when you add your wiki as a slack integration,
- * including the token.
+ * The name of your Slack Team.
  */
-$wgSlackWebhookUrl = "http://www.example.com";
+$wgSlackTeamName = "example";
+
+/*
+ * The Token for your Incoming WebHooks Integration.
+ */
+$wgSlackIntegrationToken = "yourtokenvalue";
 
 /*
  * The channel in which the integration should report all changes.
