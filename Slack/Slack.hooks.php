@@ -30,7 +30,8 @@ class SlackHooks {
       global $wgSlackWebhookUrl, $wgSlackChannel, $wgSlackUserName;
 
       // Build the message we're going to post to Slack.
-      $message = '*'.SlackHooks::encodeSlackChars($article->getTitle()).'* '
+      $message = '*<'.SlackHooks::encodeSlackChars($article->getTitle()->getFullURL())
+                     .'|'.SlackHooks::encodeSlackChars($article->getTitle()).'>* '
                 .'modified by *'.SlackHooks::encodeSlackChars($user->getName()).'*: '
                 .SlackHooks::encodeSlackChars($summary).'.';
 
