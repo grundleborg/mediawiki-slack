@@ -57,3 +57,14 @@ $wgSlackChannel = "#random";
  * The username of the integration bot that will appear in Slack.
  */
 $wgSlackUserName = "wikibot";
+
+/*
+ * Whether to prefix Wiki User Names wth an @ in Slack messages, linking them to the Slack
+ * user with the same name.
+ *
+ * Note that the wiki user name is converted to lower case (as MediaWiki always makes
+ * user names have a capital first letter, which is quite unusual in practice on other services).
+ * This means that if the corresponding Slack user name contains upper case letters, the user
+ * matching won't actually work, because Slack user matching is case sensitive.
+ */
+$wgSlackLinkUsers = false;

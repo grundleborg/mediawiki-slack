@@ -31,7 +31,7 @@ class SlackHooks {
 
   public static function onPageContentSaveComplete( $article, $user, $content, $summary, $isMinor, 
     $isWatch, $section, $flags, $revision, $status, $baseRevId ) {
-      global $wgSlackTeamName, $wgSlackIntegrationToken, $wgSlackChannel, $wgSlackUserName;
+      global $wgSlackTeamName, $wgSlackIntegrationToken, $wgSlackChannel, $wgSlackUserName, $wgSlackLinkUsers;
 
       // Build the Slack Incoming WebHooks URL.
       $url = SLACK_URL_PREFIX.$wgSlackTeamName.SLACK_URL_SUFFIX.$wgSlackIntegrationToken;
@@ -41,15 +41,27 @@ class SlackHooks {
       // Build the message we're going to post to Slack.
       $message = '*<'.SlackHooks::encodeSlackChars($article->getTitle()->getFullURL())
                      .'|'.SlackHooks::encodeSlackChars($article->getTitle()).'>* '
-                .'modified by *'.SlackHooks::encodeSlackChars($user->getName()).'*: '
-                .SlackHooks::encodeSlackChars($summary).'.';
+                .'modified by *';
+      if ($wgSlackLinkUsers) {
+        $message .= '@';
+      }
+      $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*: '
+                 .SlackHooks::encodeSlackChars($summary).'.';
 
       // Build the WebHook Payload.
-      $post = "payload="
-        .urlencode('{"channel": "'.$wgSlackChannel.'",
-                     "username": "'.$wgSlackUserName.'",
-                     "text": "'.$message.
-                   '"}');
+      // NB: The Slack parser chokes if there is a trailing , at the end of the list of items
+      //     in the payload. Make sure any optional items are in the middle to avoid this.
+      $payload = '{"channel": "'.$wgSlackChannel.'",';
+      if ($wgSlackLinkUsers) {
+        $payload .= '"link_names": "1",';
+      }
+      $payload .= '"username": "'.$wgSlackUserName.'",'
+                 .'"text": "'.$message.'"'
+                 .'}';
+
+      wfDebug("Slack Payload: ".$payload."\n");
+
+      $post = "payload=".urlencode($payload);
 
       // POST it to Slack.
       $ch = curl_init();

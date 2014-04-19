@@ -36,6 +36,23 @@ Mediawiki Integration for Slack.
 
 7. Edit a wiki page, and see the message pop up in Slack.
 
+## Optional Features
+
+The optional features that you can enable and configure are listed below.
+
+### User Name Linking
+
+This feature links the wiki user name to the equivalent Slack user in Slack messages.
+Enable it by adding the following line to LocalSettings.php:
+
+```php
+$wgSlackLinkUsers = true;
+```
+
+Note that wiki usernames are converted to Lower Case before being passed to Slack. However, Slack's
+user name linking feature is case sensitive, so if your Slack user name contains capitals, it won't
+find you.
+
 ## Improvements
 
 Pull requests for new features are welcome. There's lots more I'd like to make this integration do,
