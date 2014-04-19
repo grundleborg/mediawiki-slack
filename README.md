@@ -23,14 +23,16 @@ Mediawiki Integration for Slack.
 4. Choose the default channel you want to use and click "Add Integration".
 5. Copy the contents of the Slack folder in this repository to your wiki's extensions folder.
 6. Add the following lines to LocalSettings.php
+   
+   ```php
+   # Enable the Slack extension
+   require_once "$IP/extensions/Slack/Slack.php";
 
-    # Enable the Slack extension
-    require_once "$IP/extensions/Slack/Slack.php";
-
-    # Slack extension configuration options
-    $wgSlackWebhookUrl = "THE URL FROM STEP 3";
-    $wgSlackUserName = "THE USERNAME YOU WANT YOUR BOT TO HAVE IN SLACK";
-    $wgSlackChannel = "#theChannelForBotMessagesToAppearIn";
+   # Slack extension configuration options
+   $wgSlackWebhookUrl = "THE URL FROM STEP 3";
+   $wgSlackUserName = "THE USERNAME YOU WANT YOUR BOT TO HAVE IN SLACK";
+   $wgSlackChannel = "#theChannelForBotMessagesToAppearIn";
+   ```
 
 7. Edit a wiki page, and see the message pop up in Slack.
 
