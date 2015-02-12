@@ -4,6 +4,11 @@
     "description": "Slack Integration for MediaWiki.",
     "homepage": "https://github.com/grundleborg/mediawiki-slack",
     "license" : "MIT",
+
+    "config": {
+        "prepend-autoloader": false,
+        "optimize-autoloader": true
+    },
  
     "require": {
         "composer/installers": ">=1.0.1"
