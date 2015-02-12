@@ -28,7 +28,7 @@ Mediawiki Integration for Slack.
    require_once "$IP/extensions/Slack/Slack.php";
 
    # Slack extension configuration options
-   $wgSlackWebhookURL = "THE INTEGRATION URL FROM STEP 3";
+   $wgSlackWebhookURL = "THE INTEGRATION URL FROM STEP 4";
    $wgSlackUserName = "THE USERNAME YOU WANT YOUR BOT TO HAVE IN SLACK";
    $wgSlackChannel = "#theChannelForBotMessagesToAppearIn";
    ```
