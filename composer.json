@@ -1,0 +1,11 @@
+{
+    "name": "mediawiki/slack",
+    "type": "mediawiki-extension",
+    "description": "Slack Integration for MediaWiki.",
+    "homepage": "https://github.com/grundleborg/mediawiki-slack",
+    "license" : "MIT",
+ 
+    "require": {
+        "composer/installers": ">=1.0.1"
+    }
+}
