@@ -21,6 +21,7 @@ class SlackHooks {
     $o = str_replace("&", "&amp;", $in);
     $o = str_replace("<", "&lt;", $o);
     $o = str_replace(">", "&gt;", $o);
+    $o = str_replace('"', "&quot;", $o);
 
     return $o;
   }
