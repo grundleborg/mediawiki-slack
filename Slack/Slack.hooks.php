@@ -58,11 +58,15 @@ class SlackHooks {
       $post = "payload=".urlencode($payload);
 
       // POST it to Slack.
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $wgSlackWebhookURL);
-      curl_setopt($ch, CURLOPT_POST, 1);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-      $result = curl_exec($ch);
+      $options = array(
+        'http' => array(
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+           'method'  => 'POST',
+           'content' => $post,
+         ),
+      );
+      $context  = stream_context_create($options);
+      $result = file_get_contents($wgSlackWebhookURL, false, $context);
       wfDebug("Slack Result: ".$result."\n");
     }
 
