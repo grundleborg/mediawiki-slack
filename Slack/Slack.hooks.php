@@ -39,9 +39,12 @@ class SlackHooks {
       if ($wgSlackLinkUsers) {
         $message .= '@';
       }
-      $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*: '
-                 .SlackHooks::encodeSlackChars($summary).'.';
-
+      $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*';
+      if(!empty($summary)) {
+        $message .= ': '.SlackHooks::encodeSlackChars($summary);
+      }
+      $message .= '.';
+      
       // Build the WebHook Payload.
       // NB: The Slack parser chokes if there is a trailing , at the end of the list of items
       //     in the payload. Make sure any optional items are in the middle to avoid this.
