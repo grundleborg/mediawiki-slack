@@ -28,7 +28,11 @@ class SlackHooks {
 
   public static function onPageContentSaveComplete( $article, $user, $content, $summary, $isMinor, 
     $isWatch, $section, $flags, $revision, $status, $baseRevId ) {
-      global $wgSlackWebhookURL, $wgSlackChannel, $wgSlackUserName, $wgSlackLinkUsers;
+      global $wgSlackWebhookURL, $wgSlackChannel, $wgSlackUserName, $wgSlackLinkUsers, $wgSlackIgnoreMinor;
+
+      if ($wgSlackIgnoreMinor && $isMinor) {
+        return true;
+      }
 
       wfDebug("Slack URL: ".$wgSlackWebhookURL."\n");
 

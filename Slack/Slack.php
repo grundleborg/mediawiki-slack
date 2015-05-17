@@ -68,3 +68,8 @@ $wgSlackUserName = "wikibot";
  * matching won't actually work, because Slack user matching is case sensitive.
  */
 $wgSlackLinkUsers = false;
+
+/*
+ * Notify or not about edits, marked as "minor"
+ */
+$wgSlackIgnoreMinor = false;
