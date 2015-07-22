@@ -33,6 +33,7 @@ $dirbasename = basename( $dir );
 $wgAutoloadClasses['SlackHooks'] = $dir . '/Slack.hooks.php';
 
 // Register hooks
+$wgHooks['PageContentInsertComplete'][] = 'SlackHooks::onPageContentSaveComplete';
 $wgHooks['PageContentSaveComplete'][] = 'SlackHooks::onPageContentSaveComplete';
 
 // Configuration Defaults
