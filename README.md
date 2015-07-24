@@ -12,7 +12,6 @@ Mediawiki Integration for Slack.
 ## Requirements
 
 * MediaWiki >= 1.21
-* PHP Curl extension.
 
 ## Set Up
 
