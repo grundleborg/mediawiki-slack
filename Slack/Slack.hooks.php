@@ -15,6 +15,17 @@
 
 class SlackHooks {
 
+  public static function isCreate() {
+    global $wgSlackIsCreate;
+
+    if ($wgSlackIsCreate === true) {
+      return true;
+    }
+
+    $wgSlackIsCreate = true;
+    return false;
+  }
+
   public static function encodeSlackChars($in) {
     // This function encodes chars that the Slack API expects to be encoded in the JSON values.
     // See https://api.slack.com/docs/formatting for details.
@@ -26,44 +37,94 @@ class SlackHooks {
     return $o;
   }
 
-  public static function onPageContentSaveComplete( $article, $user, $content, $summary, $isMinor, 
-    $isWatch, $section, $flags, $revision, $status, $baseRevId ) {
-      global $wgSlackWebhookURL, $wgSlackChannel, $wgSlackUserName, $wgSlackLinkUsers;
+  public static function sendToSlack($payload) {
+    global $wgSlackWebhookURL;
 
-      wfDebug("Slack URL: ".$wgSlackWebhookURL."\n");
+    wfDebug("Slack URL: ".$wgSlackWebhookURL."\n");
+    wfDebug("Slack Payload: ".$payload."\n");
 
-      // Build the message we're going to post to Slack.
-      $message = '*<'.SlackHooks::encodeSlackChars($article->getTitle()->getFullURL())
-                     .'|'.SlackHooks::encodeSlackChars($article->getTitle()).'>* '
-                .'modified by *';
-      if ($wgSlackLinkUsers) {
-        $message .= '@';
-      }
-      $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*: '
-                 .SlackHooks::encodeSlackChars($summary).'.';
+    $post = "payload=".urlencode($payload);
 
-      // Build the WebHook Payload.
-      // NB: The Slack parser chokes if there is a trailing , at the end of the list of items
-      //     in the payload. Make sure any optional items are in the middle to avoid this.
-      $payload = '{"channel": "'.$wgSlackChannel.'",';
-      if ($wgSlackLinkUsers) {
-        $payload .= '"link_names": "1",';
-      }
-      $payload .= '"username": "'.$wgSlackUserName.'",'
-                 .'"text": "'.$message.'"'
-                 .'}';
+    // POST it to Slack.
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $wgSlackWebhookURL);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    $result = curl_exec($ch);
 
-      wfDebug("Slack Payload: ".$payload."\n");
+    wfDebug("Slack Result: ".$result."\n");
+  }
 
-      $post = "payload=".urlencode($payload);
+  public static function buildMessage($wikiPage, $user, $summary, $verb) {
+    global $wgSlackLinkUsers;
 
-      // POST it to Slack.
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $wgSlackWebhookURL);
-      curl_setopt($ch, CURLOPT_POST, 1);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-      $result = curl_exec($ch);
-      wfDebug("Slack Result: ".$result."\n");
+    // Build the message we're going to post to Slack.
+    $message = '*<'.SlackHooks::encodeSlackChars($wikiPage->getTitle()->getFullURL())
+                   .'|'.SlackHooks::encodeSlackChars($wikiPage->getTitle()).'>* '
+              .$verb.' by *';
+    if ($wgSlackLinkUsers) {
+      $message .= '@';
     }
+    $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*: '
+               .SlackHooks::encodeSlackChars($summary).'.';
+
+    return $message;
+  }
+
+  public static function buildPayload($message) {
+    global $wgSlackChannel, $wgSlackLinkUsers, $wgSlackUserName;
+
+    // Build the WebHook Payload.
+    // NB: The Slack parser chokes if there is a trailing , at the end of the list of items
+    //     in the payload. Make sure any optional items are in the middle to avoid this.
+    $payload = '{"channel": "'.$wgSlackChannel.'",';
+    if ($wgSlackLinkUsers) {
+      $payload .= '"link_names": "1",';
+    }
+    $payload .= '"username": "'.$wgSlackUserName.'",'
+               .'"text": "'.$message.'"'
+               .'}';
+
+    return $payload;
+  }
+
+  public static function onPageContentSaveComplete($wikiPage, $user, $content, $summary, $isMinor, 
+    $isWatch, $section, $flags, $revision, $status, $baseRevId) {
+
+    // If this is a page creation, don't notify it as being modified too.
+    if (true === SlackHooks::isCreate()) {
+      return true;
+    }
+
+    // Build the Slack Message.
+    $message = SlackHooks::buildMessage($wikiPage, $user, $summary, "modified");
+
+    // Build the Slack Payload.
+    $payload = SlackHooks::buildPayload($message);
+
+    // Send the message to Slack.
+    SlackHooks::sendToSlack($payload);
+
+    return true;
+  }
+
+  public static function onPageContentInsertComplete($wikiPage, $user, $content, $summary,
+    $isMinor, $isWatch, $section, $flags, $revision) {
+    global $wgSlackIsCreate;
+
+    // Flag this as a page creation so we don't notify it's been modified as well.
+    $wgSlackIsCreate = true;
+
+    // Build the Slack Message.
+    $message = SlackHooks::buildMessage($wikiPage, $user, $summary, "created");
+
+    // Build the Slack Payload.
+    $payload = SlackHooks::buildPayload($message);
+
+    // Send the message to Slack.
+    SlackHooks::sendToSlack($payload);
+
+    return true;
+  }
 
 }
