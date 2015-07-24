@@ -1,7 +1,7 @@
 <?php
 /**
  * Mediawiki Slack integration extension.
- * @version 1.0.0
+ * @version 1.0.1
  *
  * Copyright (C) 2014-2015 George Goldberg <george@grundleborg.com>
  * @author George Goldberg <george@grundleborg.com>
