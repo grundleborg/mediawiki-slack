@@ -20,7 +20,7 @@ Mediawiki Integration for Slack.
 2. Select "Incoming WebHooks" as the type.
 3. Choose the default channel you want to use and click "Add Integration".
 4. Copy the Webhook URL shown on the left of the page. We'll need this in step 6.
-5. Copy the contents of the Slack folder in this repository to your wiki's extensions folder.
+5. If you use composer to manage your MediaWiki extensions, just add ```"mediawiki/slack": ">1.0.1"``` to the require section. If you don't use composer, copy the contents of the repository into a folder called ```Slack``` in your wiki's extensions folder.
 6. Add the following lines to LocalSettings.php
    
    ```php
