@@ -1,9 +1,9 @@
 <?php
 /**
  * Mediawiki Slack integration extension.
- * @version 0.1.0
+ * @version 1.0.0
  *
- * Copyright (C) 2014 George Goldberg <george@grundleborg.com>
+ * Copyright (C) 2014-2015 George Goldberg <george@grundleborg.com>
  * @author George Goldberg <george@grundleborg.com>
  *
  * @license MIT
@@ -20,7 +20,7 @@ $wgExtensionCredits['other'][] = array(
 	'author' => array(
 		'George Goldberg'
 	),
-	'version'  => '0.1.0',
+	'version'  => '1.0.0',
 	'url' => 'https://github.com/grundleborg/mediawiki-slack',
   'descriptionmsg' => 'Slack Integration for Media Wiki.',
 );

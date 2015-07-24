@@ -7,7 +7,8 @@ Mediawiki Integration for Slack.
 
 ## Features
 
-* Notifies a Slack channel whenever any page on the wiki is edited.
+* Sends notifications to a Slack channel whenever a page is added or edited on your MediaWiki
+  installation.
 
 ## Requirements
 
