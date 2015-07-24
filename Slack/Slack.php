@@ -40,14 +40,10 @@ $wgHooks['PageContentSaveComplete'][] = 'SlackHooks::onPageContentSaveComplete';
 // These should be overridden in LocalSettings.php
 // See README.md for an example.
 /*
- * The name of your Slack Team.
+ * Your Slack Incoming Webhook URL (from the Configure Integrations section of your Slack team
+ * Administration panel).
  */
-$wgSlackTeamName = "example";
-
-/*
- * The Token for your Incoming WebHooks Integration.
- */
-$wgSlackIntegrationToken = "yourtokenvalue";
+$wgSlackWebhookURL = "https://example.com/blah/blah/blah";
 
 /*
  * The channel in which the integration should report all changes.
