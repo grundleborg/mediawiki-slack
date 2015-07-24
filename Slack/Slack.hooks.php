@@ -65,8 +65,11 @@ class SlackHooks {
     if ($wgSlackLinkUsers) {
       $message .= '@';
     }
-    $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*: '
-               .SlackHooks::encodeSlackChars($summary).'.';
+    $message .= SlackHooks::encodeSlackChars(strtolower($user->getName())).'*';
+    if (!empty($summary)) {
+      $message .= ': '.SlackHooks::encodeSlackChars($summary);
+    }
+    $message .= '.';
 
     return $message;
   }
