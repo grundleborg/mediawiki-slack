@@ -90,6 +90,12 @@ class SlackHooks {
 
   public static function onPageContentSaveComplete($wikiPage, $user, $content, $summary, $isMinor, 
     $isWatch, $section, $flags, $revision, $status, $baseRevId) {
+    global $wgSlackIgnoreMinor;
+
+    // If this is a minor edit and we want to ignore minor edits, return now.
+    if ($wgSlackIgnoreMinor && $isMinor) {
+      return true;
+    }
 
     // If this is a page creation, don't notify it as being modified too.
     if (true === SlackHooks::isCreate()) {
@@ -110,7 +116,12 @@ class SlackHooks {
 
   public static function onPageContentInsertComplete($wikiPage, $user, $content, $summary,
     $isMinor, $isWatch, $section, $flags, $revision) {
-    global $wgSlackIsCreate;
+    global $wgSlackIsCreate, $wgSlackIgnoreMinor;
+
+    // If this is a minor edit and we want to ignore minor edits, return now.
+    if ($wgSlackIgnoreMinor && $isMinor) {
+      return true;
+    }
 
     // Flag this as a page creation so we don't notify it's been modified as well.
     $wgSlackIsCreate = true;

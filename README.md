@@ -52,6 +52,15 @@ Note that wiki usernames are converted to Lower Case before being passed to Slac
 user name linking feature is case sensitive, so if your Slack user name contains capitals, it won't
 find you.
 
+### Minor edits
+
+If you don't want to receive notifications about minor edits, add the following line to
+LocalSettings.php:
+
+```php
+$wgSlackIgnoreMinor = true;
+```
+
 ## Improvements
 
 Pull requests for new features are welcome. There's lots more I'd like to make this integration do,
