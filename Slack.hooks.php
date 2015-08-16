@@ -60,7 +60,7 @@ class SlackHooks {
     wfDebug("Slack Result: ".$result."\n");
   }
 
-  public static function buildMessage($wikiPage, $user, $summary, $verb) {
+  public static function buildMessage($wikiPage, $user, $summary, $verb, $revision) {
     global $wgSlackLinkUsers;
 
     // Build the message we're going to post to Slack.
@@ -75,6 +75,20 @@ class SlackHooks {
       $message .= ': '.SlackHooks::encodeSlackChars($summary);
     }
     $message .= '.';
+
+		if(!empty($revision))
+		{
+			$diffUrl = SlackHooks::encodeSlackChars(
+				sprintf(
+					'%s&type=revision&diff=%d&oldid=%d'
+					, $wikiPage->getTitle()->getFullURL()
+					, $revision->getId()
+					, $revision->getParentId()
+				)
+			);
+
+			$message .= sprintf(" <%s|%s>", $diffUrl, "Check diff");
+		}
 
     return $message;
   }
@@ -111,7 +125,7 @@ class SlackHooks {
     }
 
     // Build the Slack Message.
-    $message = SlackHooks::buildMessage($wikiPage, $user, $summary, "modified");
+    $message = SlackHooks::buildMessage($wikiPage, $user, $summary, "modified", $revision);
 
     // Build the Slack Payload.
     $payload = SlackHooks::buildPayload($message);
