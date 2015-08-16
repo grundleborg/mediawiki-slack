@@ -76,6 +76,20 @@ class SlackHooks {
     }
     $message .= '.';
 
+		if(!empty($revision))
+		{
+			$diffUrl = SlackHooks::encodeSlackChars(
+				sprintf(
+					'%s&type=revision&diff=%d&oldid=%d'
+					, $wikiPage->getTitle()->getFullURL()
+					, $revision->getId()
+					, $revision->getParentId()
+				)
+			);
+
+			$message .= sprintf(" <%s|%s>", $diffUrl, "Check diff");
+		}
+
     return $message;
   }
 
