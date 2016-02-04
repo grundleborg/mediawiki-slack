@@ -56,6 +56,11 @@ $wgSlackChannel = "#random";
 $wgSlackUserName = "wikibot";
 
 /*
+ * The icon emoji or custom icon for the integration bot that will appear in Slack.
+ */
+$wgSlackIconEmoji = ":mediawiki:";
+
+/*
  * Whether to prefix Wiki User Names wth an @ in Slack messages, linking them to the Slack
  * user with the same name.
  *
