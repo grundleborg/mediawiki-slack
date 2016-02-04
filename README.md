@@ -30,6 +30,7 @@ Mediawiki Integration for Slack.
    # Slack extension configuration options
    $wgSlackWebhookURL = "THE INTEGRATION URL FROM STEP 4";
    $wgSlackUserName = "THE USERNAME YOU WANT YOUR BOT TO HAVE IN SLACK";
+   $wgSlackIconEmoji = ":mediawiki:"
    $wgSlackChannel = "#theChannelForBotMessagesToAppearIn";
    ```
 

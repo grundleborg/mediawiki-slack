@@ -80,7 +80,7 @@ class SlackHooks {
   }
 
   public static function buildPayload($message) {
-    global $wgSlackChannel, $wgSlackLinkUsers, $wgSlackUserName;
+    global $wgSlackChannel, $wgSlackLinkUsers, $wgSlackUserName, $wgSlackIconEmoji;
 
     // Build the WebHook Payload.
     // NB: The Slack parser chokes if there is a trailing , at the end of the list of items
@@ -90,6 +90,7 @@ class SlackHooks {
       $payload .= '"link_names": "1",';
     }
     $payload .= '"username": "'.$wgSlackUserName.'",'
+               .'"icon_emoji": "'.$wgSlackIconEmoji.'",'
                .'"text": "'.$message.'"'
                .'}';
 
